@@ -1,0 +1,84 @@
+-------------------------------------------------------------- Leetcode Problem No. 101 --------------------------------------------------------------------------------- 
+
+Question: Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+Input: root = [1,2,2,3,4,4,3]
+Output: true
+
+Explanation: The above example gave a true output as the tree would look somewhat something like this :
+                                                          1                      Now, if you draw an imaginary line in center, this would look like a mirror image
+                                                       /     \                   because in a mirror image the basic concept is left === right aur similar to it             
+                                                      2       2                  here we can see that, the left node's left child is similar to that of the right 
+                                                   /     \  /   \                node's right child (3-3) and the left node's right child is similar to that of 
+                                                  3      4  4     3              right node's left child.
+
+Approach to Code: We need to first extract the values out of the treee and then store it in a data structure, then we we'll compare the values using particular conditions
+                  We do so as there is not memory efficient way to compare the values simultaneously between nodes (if the the no. of nodes go upto like 10^4).
+
+                  So, we'll take a Stack in this case we'll push a particular node's value (leftnode.val or rightnode.value) into it, and we'll pop them to compare and again 
+                  another set of values.
+
+                  This pushing would be done in two batches, first that of the parent node (if it's single) then we'll check for the children node.
+                  First, if the first left node of the tree == first right node of the tree, then we can go on to check the daughter nodes.
+                  we'll push in four set of values in case of daughter nodes:
+                  Pair 1: Left node's left value === Right node's right value
+                  Pair 3: Left node's right value === Right node's left value
+
+CODE :
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null){//If there is not root, then automatically it would be a mirror image
+            return true;
+        }
+        
+        Stack<TreeNode> stack = new Stack<>(); //Stack is created to compare the values, as the values
+        //would be pushed into the stack and when taken out they can be checked for the conditions 
+        //of satisfying the mirror image or not
+        
+        stack.push(root.left);
+        stack.push(root.right);
+        
+        while (!stack.empty()) {
+            
+            TreeNode leftNode = stack.pop();
+            TreeNode rightNode = stack.pop();
+            
+            if (leftNode == null && rightNode == null) {
+                continue;
+            }
+            if (leftNode == null || rightNode == null || leftNode.val != rightNode.val) {
+              return false;  
+            } 
+            
+            stack.push(leftNode.left);
+            stack.push(rightNode.right);
+            
+            //The below condition is for checking the daughter elements of a node,
+            //as in a mirror left becomes right and vice-versa
+            //so left node's right value should be checked with the right node's left value
+            //vice-versa should also be applicable
+            
+            stack.push(leftNode.right);
+            stack.push(rightNode.left);
+        }
+        return true;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

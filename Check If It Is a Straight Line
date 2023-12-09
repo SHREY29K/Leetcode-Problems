@@ -1,0 +1,63 @@
+--------------------------------------------------------- LEETCODE PROBLEM NO. 1232 ------------------------------------------------------------
+
+Q) You are given an array coordinates, coordinates[i] = [x, y], where [x, y] represents the coordinate of a point. Check if these points make a straight line in the XY plane.
+
+Example 1 -> 
+Input: coordinates = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]]
+Output: true
+
+Example 2 ->
+Input: coordinates = [[1,1],[2,2],[3,4],[4,5],[5,6],[7,7]]
+Output: false
+
+Approach : Firstly, to solve this question, if the basics of Linear Geometry are known then it's child's play otherwise it might be a stretch !!!
+           To solve this question we will use something known as a "Slope". In simple terms, slope tells us how steep the line is, the rate of decrease or increase.
+           To get the slope, minimum of one point is needed and to make a line, a minimum of two points are needed, hence the inputs would always >2, that is for sure,
+           Therefore, we would have to use the "Two-point Slope" formula.
+
+           The formula is (y2-y1/y1-y0) = (x2-x1/x1-x0), and x1-x0 == x likewise y1-y0 == y. Just to make calc easier and such that it looks more presentable.
+           Hence, the formula after cross-multiplication becomes (x*(y2-y1)) == (y*(x2-x1)).
+           We'll use the above result to write the code
+
+Code:              ----------------------------------------------------------  JAVA CODE  ----------------------------------------------------------
+           
+           class Solution {
+               public boolean checkStraightLine(int[][] coordinates) {
+                    int size = coordinates.length;
+                    if(size==2){
+                        return true;
+                    }
+
+                    //Here the arbitrary x and y are being assumed for the 
+                    //initialisation of the values
+
+                    int x = coordinates[0][0] - coordinates[1][0];
+                    int y = coordinates[0][1] - coordinates[1][1];
+                    for(int i=2; i<size; i++){
+                        int X = coordinates[i][0];
+                        int Y = coordinates[i][1];
+                        if( x*(Y-coordinates[0][1])!=y*(X-coordinates[0][0])){
+                            return false;
+                        }
+                    }
+               return true;
+               }
+           }
+
+                   ----------------------------------------------------------  PYTHON CODE  ----------------------------------------------------------
+
+           class Solution:
+               def checkStraightLine(self, coordinates):
+                   size = len(coordinates)
+                   if size == 2:
+                       return True
+                   x = coordinates[0][0] - coordinates[1][0]
+                   y = coordinates[0][1] - coordinates[1][1]
+                   for i in range(2, size):
+                       X = coordinates[i][0]
+                       Y = coordinates[i][1]
+                   if x * (Y - coordinates[0][1]) != y * (X - coordinates[0][0]):
+                       return False
+               return True
+
+

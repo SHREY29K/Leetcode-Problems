@@ -1,0 +1,59 @@
+---------------------------------------------------------------------------- LEETCODE PROBLEM NO. 442 ---------------------------------------------------------------------------------------
+
+Q) Given an integer array nums of length n where all the integers of nums are in the range [1, n] and each integer appears once or twice, return an array of all the integers that appears twice.
+
+(You must write an algorithm that runs in O(n) time and uses only constant extra space)
+
+Example 1:
+
+Input: nums = [4,3,2,7,8,2,3,1]
+Output: [2,3]
+Example 2:
+
+Input: nums = [1,1,2]
+Output: [1]
+Example 3:
+
+Input: nums = [1]
+Output: []
+
+Approach : There are two main feature in this code, those are the range is from [1,n] and duplicate of a particular element would be more than 2.
+
+Iteration and Correct Index Calculation: We iterate through the array, and for each element nums[i], we compute the correct index where this element should ideally reside if the array didn't have duplicates. We calculate this index as nums[i] - 1, assuming that array indices start from 0.
+
+Swapping Elements to Correct Positions: If the current element nums[i] is not at its correct position (i.e., nums[i] != nums[correct]), we swap it with the element at its correct position. This ensures that each unique element ends up at its correct position after this process.
+
+Identifying Duplicates: After rearranging elements, any remaining discrepancies between the array indices and the elements themselves indicate duplicates. We traverse the array again and add any element that is not at its correct index (i.e., nums[index] != index + 1) to our result list.
+
+Return:Finally, we return the list containing the elements identified as duplicates.
+This code efficiently finds duplicates in an array of integers using constant space and linear time complexity. It utilizes the fact that the values in the array are within a specific range to determine the correct positions of elements.
+
+CODE: ------------------------------------------------------------------------- JAVA CODE ---------------------------------------------------------------------------------------------
+
+class Solution {
+    public List<Integer> findDuplicates(int[] nums) {
+       int i=0;
+       while (i<nums.length){
+           int correct = nums[i]-1;
+           if (nums[i]!=nums[correct]){
+               swap(nums,i,correct);
+           }else{
+               i++;
+           }
+        }
+        List<Integer> ans = new ArrayList<>();
+        for (int index=0;index<nums.length;index++){
+            if(nums[index]!=index+1){
+                ans.add(nums[index]);
+
+            }
+        }
+        return ans; 
+
+    }
+    static void swap(int[] arr,int a , int b){
+        int temp=arr[a];
+        arr[a]=arr[b];
+        arr[b]=temp;
+    }
+}

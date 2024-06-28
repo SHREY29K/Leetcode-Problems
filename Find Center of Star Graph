@@ -1,0 +1,34 @@
+---------------------------------------------------------------------------------- LEETCODE PROBLEM NO.1791 --------------------------------------------------------------------------------------
+
+Q) There is an undirected star graph consisting of n nodes labeled from 1 to n. A star graph is a graph where there is one center node and exactly n - 1 edges that connect the center node with every other node.
+You are given a 2D integer array edges where each edges[i] = [ui, vi] indicates that there is an edge between the nodes ui and vi. Return the center of the given star graph.
+
+Code Explanation:
+1) Method Declaration: his line declares a method named findCenter. The method is public, meaning it can be accessed from outside the class. It returns an integer (int), which will be the center of the star graph. It takes a 2D integer array (int[][]) as input, named edges. Each element of edges is an array representing an edge in the graph.
+2) Return Statement: This line determines the center of the star graph and returns it. It uses a ternary operator (? :), which is a shorthand for an if-else statement. The condition edges[0][0] == edges[1][0] || edges[0][0] == edges[1][1] checks if the first node of the first edge (edges[0][0]) is equal to either node of the second edge (edges[1][0] or edges[1][1]). If the condition is true, it returns edges[0][0], meaning the first node of the first edge is the center. If the condition is false, it returns edges[0][1], meaning the second node of the first edge is the center.
+
+The method findCenter takes a list of edges and finds the center node of a star graph.
+A star graph has one central node connected to all other nodes.
+The method checks the first edge to see if its first node is the center by comparing it with the nodes of the second edge.
+If the first node of the first edge matches either node of the second edge, it is the center.
+Otherwise, the second node of the first edge is the center.
+
+CODE :
+class Solution {
+    // This is the definition of the class named Solution. 
+    // In Java, a class is a blueprint from which objects are created.
+    // This class contains a method to find the center of a star graph.
+    
+    public int findCenter(int[][] edges) {
+        // This is a method named findCenter that takes a 2D integer array called edges as input.
+        // The method is public, so it can be accessed from outside the class.
+        // It returns an integer, which will be the center of the star graph.
+
+        // We check if the first element of the first edge is equal to either element of the second edge.
+        // If edges[0][0] is equal to edges[1][0] or edges[1][1], then edges[0][0] is the center.
+        return edges[0][0] == edges[1][0] || edges[0][0] == edges[1][1] ? edges[0][0] : edges[0][1];
+    }
+    // If the first element of the first edge is not the center, then the center must be the second element of the first edge.
+    // We return edges[0][1] if the above condition is false.
+}
+

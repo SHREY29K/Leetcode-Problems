@@ -1,0 +1,70 @@
+--------------------------------------------------------------------------- LEETCODE PROBLEM NO.16 ------------------------------------------------------------------------------------------------
+
+Q) Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
+Return the sum of the three integers.You may assume that each input would have exactly one solution.
+
+Code Explanation:
+Sort the Array:
+
+The first step is to sort the input array nums.
+Sorting helps in efficiently finding the closest sum by using a two-pointer approach later.
+Initialize the Closest Sum:
+
+Initialize closestSum with the sum of the first three elements of the sorted array.
+This gives a starting point to compare with other potential sums.
+Iterate through the Array:
+
+Use a loop to iterate through the array with index i running from 0 to nums.length - 3.
+For each element nums[i], use a two-pointer approach to find the other two elements that, together with nums[i], make a sum closest to the target.
+Two-Pointer Approach:
+
+Initialize two pointers: j to i + 1 (the element immediately after i) and k to nums.length - 1 (the last element in the array).
+The idea is to adjust the pointers j and k to find the sum of three elements that is closest to the target.
+Calculate the Sum:
+
+Calculate the sum of the three elements: nums[i] + nums[j] + nums[k].
+Compare the absolute difference between the current sum and the target with the absolute difference between the closestSum and the target.
+If the current sum is closer to the target, update closestSum.
+Adjust Pointers:
+
+If the current sum is less than the target, increment j to increase the sum.
+If the current sum is greater than the target, decrement k to decrease the sum.
+This adjustment helps in finding a sum closer to the target.
+Repeat the Process:
+
+Continue adjusting j and k and updating closestSum for each iteration of i.
+This ensures that you explore all possible sums and find the one closest to the target.
+Return the Result:
+
+After completing all iterations, return closestSum as the sum closest to the target.
+
+CODE:
+import java.util.Arrays;
+
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int closestSum = nums[0] + nums[1] + nums[2]; // Initialize closest sum with the sum of the first three elements
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            int j = i + 1;
+            int k = nums.length - 1;
+
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+
+                if (Math.abs(target - sum) < Math.abs(target - closestSum)) {
+                    closestSum = sum; // Update closest sum if the current sum is closer to the target
+                }
+
+                if (sum < target) {
+                    j++; // Increment j to increase the sum
+                } else {
+                    k--; // Decrement k to decrease the sum
+                }
+            }
+        }
+
+        return closestSum;
+    }
+}

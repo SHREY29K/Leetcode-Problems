@@ -1,0 +1,76 @@
+------------------------------------------------------------------------------ LEETCODE PROBLEM N0.1482 -------------------------------------------------------------------------------------------
+
+Q) You are given an integer array bloomDay, an integer m and an integer k. You want to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden. The garden consists of n flowers, the ith flower will bloom in the bloomDay[i] and then can be used in exactly one bouquet. Return the minimum number of days you need to wait to be able to make m bouquets from the garden. If it is impossible to make m bouquets return -1.
+
+Example 1:
+
+Input: bloomDay = [1,10,3,10,2], m = 3, k = 1
+Output: 3
+Explanation: Let us see what happened in the first three days. x means flower bloomed and _ means flower did not bloom in the garden.
+We need 3 bouquets each should contain 1 flower.
+After day 1: [x, _, _, _, _]   // we can only make one bouquet.
+After day 2: [x, _, _, _, x]   // we can only make two bouquets.
+After day 3: [x, _, x, _, x]   // we can make 3 bouquets. The answer is 3.
+
+Example 2:
+
+Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
+Output: -1
+Explanation: We need 3 bouquets each has 2 flowers, that means we need 6 flowers. We only have 5 flowers so it is impossible to get the needed bouquets and we return -1.
+
+Code Explanation:
+Understand the Problem: You need to determine the minimum number of days required to make m bouquets, where each bouquet requires k consecutive flowers that have bloomed. If it's impossible to make m bouquets, return -1.
+
+Binary Search Approach:
+
+Since the number of days can be very large (up to 1 billion), a linear search would be inefficient. Instead, use a binary search to efficiently narrow down the number of days.
+Set an initial search range from 0 to 1 billion (as the maximum possible number of days).
+Midpoint Check:
+
+For each midpoint in the binary search range, check if it's possible to make at least m bouquets by that day.
+This involves iterating through the bloomDay array and counting the number of possible bouquets that can be made if the flowers have bloomed by the midpoint day.
+Counting Bouquets:
+
+While iterating through the bloomDay array, keep track of consecutive flowers that have bloomed by the midpoint day.
+If the count of consecutive bloomed flowers reaches k, increment the bouquet count and reset the consecutive count.
+Adjust Search Range:
+
+If the number of bouquets made is at least m, it means it's possible to make m bouquets by the midpoint day. So, try to find a smaller number of days by adjusting the search range to the left half.
+If the number of bouquets made is less than m, it means more days are needed. Adjust the search range to the right half.
+Final Result:
+
+Continue the binary search until the search range is exhausted.
+The final answer will be the minimum number of days required to make m bouquets, or -1 if it's not possible.
+
+Code:
+class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        int s = 0, e = (int)1e9;
+        int ans = -1;
+
+        while (s <= e) {
+            int mid = s + (e - s) / 2;
+            int con = 0, buk = 0;
+
+            for (int i = 0; i < bloomDay.length; i++) {
+                if (bloomDay[i] <= mid) {
+                    con++;
+                    if (con >= k) {
+                        buk++;
+                        con = 0;
+                    }
+                } else {
+                    con = 0;
+                }
+            }
+
+            if (buk >= m) {
+                ans = mid;
+                e = mid - 1;
+            } else {
+                s = mid + 1;
+            }
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,49 @@
+--------------------------------------------------------------------------------- LEETCODE PROBLEM NO. 2285 --------------------------------------------------------------------------------------
+
+Q) You are given an integer n denoting the number of cities in a country. The cities are numbered from 0 to n - 1. You are also given a 2D integer array roads where roads[i] = [ai, bi] denotes that there exists a bidirectional road connecting cities ai and bi.
+You need to assign each city with an integer value from 1 to n, where each value can only be used once. The importance of a road is then defined as the sum of the values of the two cities it connects.
+Return the maximum total importance of all roads possible after assigning the values optimally.
+
+Code explanation:
+Assign each city a unique integer value from 1 to n. The importance of a road is defined as the sum of the values of the two cities it connects. Return the maximum total importance of all roads possible after assigning values optimally
+1) Degree Calculation:The degree of a city is the number of roads connected to it. First, we calculate the degree of each city and store it in an array degreeStorage.
+2) Sort Cities by Degree: Cities with higher degrees should get higher values to maximize the importance of the roads. We sort the cities based on their degrees in descending order.
+3) Assign Values to Cities: Assign the highest available value to the city with the highest degree. Continue this process for all cities.
+4) Calculate Total Importance: Using the assigned values, calculate the total importance of all roads.
+
+=> Initialize Degree Storage: Create an array degreeStorage to store the degree of each city. Traverse through each road and increment the degree of the cities connected by that road.
+=> Sort Cities by Degree: Create an array cities to store the indices of the cities. Sort the cities based on their degrees in descending order using a comparator
+=> Assign Values to Cities: Initialize a variable importance to accumulate the total importance. Assign values to cities starting from the highest degree to the lowest, multiplying the degree of each city by the value assigned.
+=> Return the Result: Return the accumulated total importance.
+
+CODE :
+class Solution {
+    public long maximumImportance(int n, int[][] roads) {
+        int[] degreeStorage = new int[n];
+
+        //Degree for each city
+        for (int[] eachRoad : roads){
+            degreeStorage[eachRoad[0]]++;
+            degreeStorage[eachRoad[1]]++;
+        }
+
+        //Now Sort the cities by their respective degress
+        Integer[] cities = new Integer[n];
+        for(int i=0; i<n; i++){
+            cities[i] = i;
+        }
+        Arrays.sort(cities, new Comparator<Integer>(){
+            public int compare(Integer a, Integer b){
+                return Integer.compare(degreeStorage[b], degreeStorage[a]);
+            }
+        });
+
+        //Assignment of degress
+        long importance = 0;
+        for(int i=0; i<n; i++){
+            importance+= (long)(n-i)*degreeStorage[cities[i]];
+        }
+
+        return importance;
+    }
+}

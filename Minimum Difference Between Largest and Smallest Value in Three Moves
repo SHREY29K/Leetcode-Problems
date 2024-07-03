@@ -1,0 +1,72 @@
+--------------------------------------------------------------------------------- LEETCODE PROBLEM NO.1509 -----------------------------------------------------------------------------------------
+
+Q) You are given an integer array nums. In one move, you can choose one element of nums and change it to any value.
+Return the minimum difference between the largest and smallest value of nums after performing at most three moves.
+
+Example 1:
+
+Input: nums = [5,3,2,4]
+Output: 0
+Explanation: We can make at most 3 moves.
+In the first move, change 2 to 3. nums becomes [5,3,3,4].
+In the second move, change 4 to 3. nums becomes [5,3,3,3].
+In the third move, change 5 to 3. nums becomes [3,3,3,3].
+After performing 3 moves, the difference between the minimum and maximum is 3 - 3 = 0.
+
+Example 2:
+
+Input: nums = [1,5,0,10,14]
+Output: 1
+Explanation: We can make at most 3 moves.
+In the first move, change 5 to 0. nums becomes [1,0,0,10,14].
+In the second move, change 10 to 0. nums becomes [1,0,0,0,14].
+In the third move, change 14 to 1. nums becomes [1,0,0,0,1].
+After performing 3 moves, the difference between the minimum and maximum is 1 - 0 = 1.
+It can be shown that there is no way to make the difference 0 in 3 moves.
+
+Explanation : By sorting the array, you can focus on the boundary elements and their possible adjustments. You explore different ways to adjust these boundary elements to minimize the difference between the largest and smallest values. This approach efficiently computes the minimum possible difference after up to three changes.
+              Sorting: 
+
+              Start by sorting the array. Sorting helps because once the array is sorted, the smallest and largest values are at the ends. This makes it easier to analyze potential minimum differences by focusing on the smallest and largest values.
+
+              Change Analysis:
+              
+              After sorting, the smallest value of the array is at the beginning, and the largest value is at the end.
+              To minimize the difference between the largest and smallest values, you can change up to three elements. Thus, the key is to find configurations where you adjust these extreme values (either increasing the smallest values or decreasing the largest values).
+              
+              Consider Different Configurations:
+              
+              To explore how changing up to three elements impacts the difference, you consider the following scenarios:
+              Changing the three largest values: This means you will have to compare the difference after removing the three largest elements.
+              Changing the three smallest values: This means you will have to compare the difference after removing the three smallest elements.
+              Combinations of changing elements from both ends (e.g., changing two largest and one smallest, or two smallest and one largest).
+
+              Computing Minimum Difference:
+              
+              After considering different configurations, you calculate the difference between the largest and smallest values in each scenario.
+              The goal is to find the minimum difference from these configurations.
+
+              Special Cases:
+              
+              If the array has 4 or fewer elements, you can always make all elements the same with up to three moves, resulting in a difference of 0.
+
+
+Code : 
+class Solution {
+    public int minDifference(int[] nums) {
+        int n = nums.length;
+        if (n <= 4){
+            return 0;
+        }
+
+        Arrays.sort(nums);
+
+        int minDiff = Integer.MAX_VALUE;
+        
+        for (int i = 0; i <= 3; i++) {
+            minDiff = Math.min(minDiff, nums[n - 4 + i] - nums[i]);
+        }
+        
+        return minDiff; 
+    }
+}

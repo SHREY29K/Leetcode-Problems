@@ -1,0 +1,70 @@
+------------------------------------------------------------------------------- LEETCODE PROBLEM NO. 2181 -------------------------------------------------------------------------------------------
+
+Q) You are given the head of a linked list, which contains a series of integers separated by 0's. The beginning and end of the linked list will have Node.val == 0.
+For every two consecutive 0's, merge all the nodes lying in between them into a single node whose value is the sum of all the merged nodes. The modified list should not contain any 0's.
+Return the head of the modified linked list.
+
+Example 1:
+
+Input: head = [0,3,1,0,4,5,2,0]
+Output: [4,11]
+Explanation: 
+The above figure represents the given linked list. The modified list contains
+- The sum of the nodes marked in green: 3 + 1 = 4.
+- The sum of the nodes marked in red: 4 + 5 + 2 = 11.
+
+Explanation : 1) Initialize the Dummy Node and Sum Variable:
+
+              Create a dummy node (dummy) with value 0. This node acts as the starting point of our new linked list.
+              Create a pointer (current) that initially points to the dummy node.
+              Initialize an integer variable (sum) to 0. This variable will accumulate the sum of node values between zeros.
+
+              2) Iterate Through the Original List:
+              
+              Traverse the linked list using a while loop.
+              For each node, check its value:
+              If the node's value is 0:
+                  (i) Check if sum is non-zero. If sum is non-zero, it means we have accumulated values between zeros.
+                  (ii) Create a new node with the accumulated sum and append it to the result list.
+                  (iii) Reset the sum to 0 to start accumulating values for the next segment.
+              If the node's value is not 0:
+                  Add the node's value to sum.
+
+              3) Finalize the Result List:
+              
+              The dummy node's next pointer will point to the head of the new linked list that contains the summed values.
+              Return dummy.next to skip the dummy node and get the resultant list.
+
+
+CODE: /**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeNodes(ListNode head) {
+        ListNode dummy = new ListNode(0); // Dummy node to start the result list
+        ListNode current = dummy;
+        int sum = 0; // This variable acts as the "stack"
+
+        while (head != null) {
+            if (head.val == 0) {
+                if (sum != 0) { // If the sum (stack) is not zero
+                    current.next = new ListNode(sum); // Add a new node with the sum to the result list
+                    current = current.next;
+                    sum = 0; // Reset the sum (stack)
+                }
+            } else {
+                sum += head.val; // Accumulate the value to the sum (stack)
+            }
+            head = head.next; // Move to the next node
+        }
+
+        return dummy.next;
+    }
+}

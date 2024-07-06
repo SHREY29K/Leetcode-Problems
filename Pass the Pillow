@@ -1,0 +1,61 @@
+------------------------------------------------------------------------------- LEETCODE PROBLEM NO. 2582 ------------------------------------------------------------------------------------------
+
+Q) There are n people standing in a line labeled from 1 to n. The first person in the line is holding a pillow initially. Every second, the person holding the pillow passes it to the next person standing in the line. Once the pillow reaches the end of the line, the direction changes, and people continue passing the pillow in the opposite direction.
+For example, once the pillow reaches the nth person they pass it to the n - 1th person, then to the n - 2th person and so on.
+Given the two positive integers n and time, return the index of the person holding the pillow after time seconds.
+
+Example 1:
+
+Input: n = 4, time = 5
+Output: 2
+Explanation: People pass the pillow in the following way: 1 -> 2 -> 3 -> 4 -> 3 -> 2.
+After five seconds, the 2nd person is holding the pillow.
+
+Example 2:
+
+Input: n = 3, time = 2
+Output: 3
+Explanation: People pass the pillow in the following way: 1 -> 2 -> 3.
+After two seconds, the 3rd person is holding the pillow.
+
+Code Explanation :
+If you're thinking to apply this logic of :  if(time == n){
+            return n-1;
+        }else if(time > n){
+            return n-((time-n)+1);
+        }else{
+            return time+1;
+
+Then this won't work for multiple cycles, to work for multiple cycles you, need to multiply 'n-1' by 2, to find for cycles, and effectiveTime also b/w each cycle.
+Identify the Cycle:
+
+The pillow starts at the first person and moves forward to the nth person.
+When it reaches the nth person, it moves backward to the first person.
+This complete forward and backward movement forms a cycle.
+The length of this cycle is 2 * (n - 1) seconds. This is because it takes n - 1 seconds to go from the first to the nth person, and another n - 1 seconds to go back to the first person.
+
+Determine Effective Time:
+
+Given the total time t, the effective time within a cycle can be found by taking the remainder of t divided by the cycle length. This can be expressed as t % (2 * (n - 1)).
+This effective time tells us the position of the pillow within one complete cycle.
+
+Determine Pillow Position:
+
+If the effective time is less than n - 1, the pillow is moving forward.
+If the effective time is greater than or equal to n - 1, the pillow is moving backward.
+Based on the effective time, calculate the current position of the pillow:
+If moving forward, the pillow is at position effective time + 1.
+If moving backward, calculate how far back from the nth person the pillow has moved.
+
+Code: class Solution {
+    public int passThePillow(int n, int time) {
+        int cycleLength = 2 * (n - 1);
+        int effectiveTime = time % cycleLength;
+
+        if (effectiveTime < n) {
+            return effectiveTime + 1;
+        } else {
+            return 2 * n - effectiveTime - 1;
+        }
+    }
+}

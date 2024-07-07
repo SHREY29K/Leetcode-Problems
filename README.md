@@ -16,4 +16,4 @@ Usage
 Feel free to explore the solutions provided in this repository. You can study the problem statements, read the explanations, and analyze the code to understand various approaches to solving each problem.
 
 Contributing
-Contributions to this repository are welcome. If you have alternative solutions to the problems, improvements to the existing solutions, or new problems to add, please feel free to submit a pull request.
+Contributions to this repository are welcome. If you have alternative solutions to the problems, improvements to the existing solutions, or new problems to add, please feel free to submit a pull request. Also, if you need help in any of the questions just drop a message on my mail  :  shk29171112@gmail.com

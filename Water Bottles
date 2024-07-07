@@ -1,0 +1,54 @@
+------------------------------------------------------------------------------------ LEETCODE PROBLEM NO. 1518 --------------------------------------------------------------------------------------
+
+Q) There are numBottles water bottles that are initially full of water. You can exchange numExchange empty water bottles from the market with one full water bottle.
+The operation of drinking a full water bottle turns it into an empty bottle.
+Given the two integers numBottles and numExchange, return the maximum number of water bottles you can drink.
+
+Example 1:
+
+Input: numBottles = 9, numExchange = 3
+Output: 13
+Explanation: You can exchange 3 empty bottles to get 1 full water bottle.
+Number of water bottles you can drink: 9 + 3 + 1 = 13.
+
+Example 2:
+
+Input: numBottles = 15, numExchange = 4
+Output: 19
+Explanation: You can exchange 4 empty bottles to get 1 full water bottle. 
+Number of water bottles you can drink: 15 + 3 + 1 = 19.
+
+Code Explanation :
+Initial Setup:
+
+Start with numBottles full bottles.
+Initialize totalDrunk with the number of initial full bottles since you can drink all of them.
+Set emptyBottles to numBottles because after drinking all the initial full bottles, all of them become empty.
+
+Exchange Process:
+
+As long as the number of empty bottles is greater than or equal to numExchange, you can exchange them for new full bottles.
+Calculate the number of new full bottles you get by dividing emptyBottles by numExchange.
+Add the new full bottles to totalDrunk since you can drink these.
+Update emptyBottles to be the remainder of the division plus the new full bottles you just received. This accounts for the empty bottles left after exchanging and the empty bottles that result from drinking the new full bottles.
+
+Termination:
+
+The loop continues until you can no longer exchange empty bottles for full ones (i.e., emptyBottles < numExchange).
+
+Code:
+class Solution {
+    public int numWaterBottles(int numBottles, int numExchange) {
+        int totalDrunk = numBottles;
+        int emptyBottles = numBottles;
+
+
+        while (emptyBottles >= numExchange) {
+            int newFullBottles = emptyBottles / numExchange; 
+            totalDrunk += newFullBottles; 
+            emptyBottles = emptyBottles % numExchange + newFullBottles; 
+        }
+
+        return totalDrunk;
+    }
+}

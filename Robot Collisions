@@ -1,0 +1,122 @@
+------------------------------------------------------------------------------------- LEETCODE PROBLEM NO.2751 ---------------------------------------------------------------------------------------
+
+Q)There are n 1-indexed robots, each having a position on a line, health, and movement direction.
+You are given 0-indexed integer arrays positions, healths, and a string directions (directions[i] is either 'L' for left or 'R' for right). All integers in positions are unique.
+All robots start moving on the line simultaneously at the same speed in their given directions. If two robots ever share the same position while moving, they will collide.
+If two robots collide, the robot with lower health is removed from the line, and the health of the other robot decreases by one. The surviving robot continues in the same direction it was going. If both robots have the same health, they are both removed from the line.
+Your task is to determine the health of the robots that survive the collisions, in the same order that the robots were given, i.e. final heath of robot 1 (if survived), final health of robot 2 (if survived), and so on. If there are no survivors, return an empty array.
+Return an array containing the health of the remaining robots (in the order they were given in the input), after no further collisions can occur.
+Note: The positions may be unsorted.
+
+Example 1:
+                                                                                                                                                                                                  
+Input: positions = [5,4,3,2,1], healths = [2,17,9,15,10], directions = "RRRRR"
+Output: [2,17,9,15,10]
+Explanation: No collision occurs in this example, since all robots are moving in the same direction. So, the health of the robots in order from the first robot is returned, [2, 17, 9, 15, 10].
+                                                                                                                                                                                                  
+Example 2:
+
+Input: positions = [3,5,2,6], healths = [10,10,15,12], directions = "RLRL"
+Output: [14]
+Explanation: There are 2 collisions in this example. Firstly, robot 1 and robot 2 will collide, and since both have the same health, they will be removed from the line. Next, robot 3 and robot 4 will collide and since robot 4's health is smaller, it gets removed, and robot 3's health becomes 15 - 1 = 14. Only robot 3 remains, so we return [14].
+                                                                                                                                                                                                                                                                                                                                                                                                
+Example 3:
+
+Input: positions = [1,2,5,6], healths = [10,10,11,11], directions = "RLRL"
+Output: []
+Explanation: Robot 1 and robot 2 will collide and since both have the same health, they are both removed. Robot 3 and 4 will collide and since both have the same health, they are both removed. So, we return an empty array, [].
+
+Constraints:
+
+1 <= positions.length == healths.length == directions.length == n <= 105
+1 <= positions[i], healths[i] <= 109
+directions[i] == 'L' or directions[i] == 'R'
+All values in positions are distinct
+                                                                                                                                                                                                  
+Code:
+class Solution {
+    class Robot{
+        int pos;
+        int health;
+        char dir;
+        int id;
+        Robot(int pos, int health, char dir, int id){
+            this.pos = pos;
+            this.health = health;
+            this.dir = dir;
+            this.id = id;
+        }
+    }
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        Robot[] robots = new Robot[positions.length];
+        for(int i=0; i<robots.length; i++){
+            //idhar humne saare robots ko ek jagah daaldiya, for better extraction pov
+            robots[i] = new Robot(positions[i], healths[i], directions.charAt(i), i);
+        }
+        //lambda expression is more easier, kaun comparator likhte rahega
+        Arrays.sort(robots, (a,b) -> a.pos-b.pos);
+
+        //Stack banado for comparing as to compare in 0(1)
+        Stack<Robot> stack = new Stack<>();
+        for(int i=0; i<robots.length; i++){
+            Robot current = robots[i];
+            robots[i] = null;
+            //Hum idhar dekh rahe hai ki dir "L" hai ya nahi as       
+            //  R1--> <--R2 (that's how the collision would work)
+            if(current.dir == 'L'){
+                //agar left hai direction
+                //then ab check karte raho till, for the element in the stack if it's in "R" direction
+                //Ab jisse bhi robot bhid raha hai, usse health zyada leke chalunga waali condition (ATQ)
+                while(!stack.isEmpty() && stack.peek().dir == 'R' && current.health>0){
+                    Robot prev = stack.pop();
+                    int minimum = Math.min(prev.health, current.health);
+                    //Agar previous waale ki health zyada thi, toh ab deduct karna hoga
+                    //and jiski kaam health thi, taking current toh uski 0 kardenge
+                    //0 mtlb robot tata bye bye
+                    if(minimum!=prev.health){
+                        prev.health-=1;
+                        current.health = 0;
+                    }else if(minimum!=current.health){
+                        current.health-=1;
+                        prev.health = 0;
+                    }else{//mtlb dono same pe hai
+                        current.health = 0;
+                        prev.health = 0;
+                    }
+                    //agar jo pehle pop karke check kar rahe thhe, woh abhi tak tika hua
+                    //mtlb current=0 hogaya hai in some case or other
+                    //phir usko wapas stack mein puch kardo, for the next fight
+                    if(prev.health>0){
+                        stack.push(prev);
+                    }
+                    //ab ismein ek aur case banega, agar current abhi bhi bacha hai, 
+                    //woh if ke bahar hoga, because yeh loop bhi toh current ke upar hii chal raha hai
+                    //woh tabh hai if current is victorious in it's current battle.
+                    //toh mtlb prev=0 hai, ab current ko push kardo stack mein
+                }
+            }
+            //Yeh tabh bhi ho sakta hai, is cuurent ki direction right hii ho, toh stack mein 
+            //pehle isko hii push karna padega
+            if(current.health>0){
+                stack.push(current);
+            }
+        }
+        while(!stack.isEmpty()){
+            robots[stack.peek().id] = stack.pop();
+        }
+
+        List<Integer> result = new ArrayList<>();
+        for(int i=0; i<robots.length; i++){
+            if(robots[i]!=null){
+                result.add(robots[i].health);
+            }
+        }
+        return result;
+    }
+}                                                                                                                                                                                              
+                                                                                                                                                                                                  
+                                                                                                                                                                                                  
+                                                                                                                                                                                                  
+                                                                                                                                                                                                  
+                                                                                                                                                                                                  
+                                                                                                                                                                                                  
